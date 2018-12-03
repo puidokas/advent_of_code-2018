@@ -1,16 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using advent_of_code_2018.solutions;
 
 namespace advent_of_code_2018
 {
     class Program
     {
+        const int LastDayInAdvent = 3;
+
         static void Main(string[] args)
         {
             Console.WriteLine("Advent of code 2018 by Jonas Hoffmann");
 
-            var daysToSolve = Enumerable.Range(1, 2);
+            var daysToSolve = Enumerable.Range(1, LastDayInAdvent);
 
             foreach (int day in daysToSolve)
             {
@@ -25,10 +27,13 @@ namespace advent_of_code_2018
             switch (dayNo)
             {
                 case 1:
-                    Console.WriteLine(getResultDay1());
+                    Day_01_Frequencies.Run();
                     break;
                 case 2:
-                    Console.WriteLine(getResultDay2());
+                    Day_02_Inventories.Run();
+                    break;
+                case 3:
+                    Day_03_Fabric.Run();
                     break;
                 default:
                     Console.WriteLine("Default case");
@@ -36,57 +41,6 @@ namespace advent_of_code_2018
             }
         }
 
-        private static string[] getInput(string fileName)
-        {
-            string[] lines = System.IO.File.ReadAllLines(@"..\..\..\resources\" + fileName + ".txt");
-            return lines;
-        }
 
-        private static int getResultDay1()
-        {
-            string[] lines = getInput("input1");
-            int num, result = 0;
-            foreach (string line in lines)
-            {
-                num = Int32.Parse(line);
-                result += num;
-            }
-
-            return result;
-        }
-
-        private static int getResultDay2()
-        {
-            string[] lines = getInput("input2");
-
-            int twice = 0, thrice = 0;
-            bool twiceThisLine = false, thriceThisLine = false;
-
-            foreach (string line in lines)
-            {
-                twiceThisLine = false;
-                thriceThisLine = false;
-
-                foreach (char char_ in line)
-                {
-                    int charNumberOfTimesAppears = line.Count(x => x == char_);
-
-                    if (charNumberOfTimesAppears == 2 && !twiceThisLine)
-                    {
-                        twiceThisLine = true;
-                        twice++;
-                    }
-                    else if (charNumberOfTimesAppears == 3 && !thriceThisLine)
-                    {
-                        thriceThisLine = true;
-                        thrice++;
-                    }
-                }
-            }
-
-            int result = twice * thrice;
-
-            return result;
-        }
     }
 }
