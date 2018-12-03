@@ -50,10 +50,10 @@ namespace advent_of_code_2018.solutions
             return checksum;
         }
 
+        // What letters are common between the two correct box IDs?
+
         private static string GetCommonLetters(string[] lines)
         {
-            // What letters are common between the two correct box IDs?
-
             List<char> commonLetters = null;
 
             for (int i = 0; i < lines.Length - 1; i++)

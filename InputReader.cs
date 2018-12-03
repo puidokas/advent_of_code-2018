@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace advent_of_code_2018
+﻿namespace advent_of_code_2018
 {
     class InputReader
     {

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace advent_of_code_2018.solutions
@@ -23,6 +21,7 @@ namespace advent_of_code_2018.solutions
         }
 
         // How many square inches of fabric are within two or more claims?
+
         private static int GetNumberOfOverlappingSquareInches(string[] lines, ref int[][] claims, ref int[,] squareInches)
         {
             Regex regex = new Regex(@"#(\d+)\s@\s(\d+),(\d+):\s(\d+)x(\d+)");
@@ -61,10 +60,10 @@ namespace advent_of_code_2018.solutions
             return numOfsquareInchesOverlapping;
         }
 
+        // What is the ID of the only claim that doesn't overlap?
+
         private static int GetIdOfNotOverlappingClaim(int[][] claims, int[,] squareInches)
         {
-            // What is the ID of the only claim that doesn't overlap?
-
             int claimId, leftEdge, topEdge, wide, tall;
             bool claimOverlapping = false;
             int claimNotOverlappingId = 0;
