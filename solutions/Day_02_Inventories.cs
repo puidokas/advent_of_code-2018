@@ -16,12 +16,12 @@ namespace advent_of_code_2018.solutions
             Console.WriteLine((checksum, commonLetters));
         }
 
+        // What is the checksum for your list of box IDs?
+
         private static int GetChecksum(string[] lines)
         {
             int twice = 0, thrice = 0;
             bool twiceThisLine = false, thriceThisLine = false;
-
-            // What is the checksum for your list of box IDs?
 
             foreach (string line in lines)
             {
@@ -69,19 +69,13 @@ namespace advent_of_code_2018.solutions
                     for (int k = 0; k < line1.Length; k++)
                     {
                         if (line1[k] != line2[k])
-                        {
                             diffs++;
-                        }
                         else
-                        {
                             diffLetters.Add(line1[k]);
-                        }
                     }
 
                     if (diffs == 1)
-                    {
                         commonLetters = diffLetters;
-                    }
                 }
 
             }

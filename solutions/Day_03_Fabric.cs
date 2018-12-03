@@ -52,9 +52,7 @@ namespace advent_of_code_2018.solutions
                             squareInches[leftEdge + x, topEdge + y]++;
 
                             if (squareInches[leftEdge + x, topEdge + y] == 2)
-                            {
                                 numOfsquareInchesOverlapping++;
-                            }
                         }
                     }
                 }
@@ -86,16 +84,12 @@ namespace advent_of_code_2018.solutions
                     for (int x = 0; x < wide; x++)
                     {
                         if (squareInches[leftEdge + x, topEdge + y] > 1)
-                        {
                             claimOverlapping = true;
-                        }
                     }
                 }
 
                 if (!claimOverlapping)
-                {
                     claimNotOverlappingId = claimId;
-                }
             }
 
             return claimNotOverlappingId;

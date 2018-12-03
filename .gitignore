@@ -1,4 +1,4 @@
 ﻿# Exclude C# folders
 /bin
 /obj
-*.csproj
+*.csproj*

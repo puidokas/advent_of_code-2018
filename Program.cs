@@ -36,7 +36,7 @@ namespace advent_of_code_2018
                     Day_03_Fabric.Run();
                     break;
                 default:
-                    Console.WriteLine("Default case");
+                    Console.WriteLine("Unknown day");
                     break;
             }
         }
