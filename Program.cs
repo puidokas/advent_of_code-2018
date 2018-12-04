@@ -6,7 +6,7 @@ namespace advent_of_code_2018
 {
     class Program
     {
-        const int LastDayInAdvent = 3;
+        const int LastDayInAdvent = 4;
 
         static void Main(string[] args)
         {
@@ -27,13 +27,16 @@ namespace advent_of_code_2018
             switch (dayNo)
             {
                 case 1:
-                    Day_01_Frequencies.Run();
+                    //Day_01_Frequencies.Run();
                     break;
                 case 2:
-                    Day_02_Inventories.Run();
+                    //Day_02_Inventories.Run();
                     break;
                 case 3:
-                    Day_03_Fabric.Run();
+                    //Day_03_Fabric.Run();
+                    break;
+                case 4:
+                    Day_04_Guards.Run();
                     break;
                 default:
                     Console.WriteLine("Unknown day");

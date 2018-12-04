@@ -43,7 +43,6 @@ namespace advent_of_code_2018.solutions
 
                     claims[claimId - 1] = new int[] { leftEdge, topEdge, wide, tall };
 
-
                     for (int y = 0; y < tall; y++)
                     {
                         for (int x = 0; x < wide; x++)
