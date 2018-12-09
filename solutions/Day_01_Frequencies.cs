@@ -18,7 +18,7 @@ namespace advent_of_code_2018.solutions
 
         private static (int, int) GetFrequencies()
         {
-            string[] lines = InputReader.getInput("input1");
+            string[] lines = InputReader.GetInput("input1");
 
             int num, resultFrequency = 0, currentFrequency = 0, duplicateFrequency = 0;
             List<int> frequencies = new List<int>();

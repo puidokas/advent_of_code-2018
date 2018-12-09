@@ -9,7 +9,7 @@ namespace advent_of_code_2018.solutions
     {
         public static void Run()
         {
-            string[] lines = InputReader.getInput("input6");
+            string[] lines = InputReader.GetInput("input6");
 
             List<(int x, int y)> testPoints = new List<(int x, int y)>() {
                 (1, 1),

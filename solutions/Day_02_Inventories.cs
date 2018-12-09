@@ -8,7 +8,7 @@ namespace advent_of_code_2018.solutions
     {
         public static void Run()
         {
-            string[] lines = InputReader.getInput("input2");
+            string[] lines = InputReader.GetInput("input2");
 
             int checksum = GetChecksum(lines);
             string commonLetters = GetCommonLetters(lines);

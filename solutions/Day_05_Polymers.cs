@@ -7,7 +7,7 @@ namespace advent_of_code_2018.solutions
     {
         public static void Run()
         {
-            string inputText = InputReader.getInput("input5")[0];
+            string inputText = InputReader.GetInput("input5")[0];
 
             int numberOfUnitsLeft = GetNumberOfUnitsLeft(inputText);
             int shortestProducablePolymer = GetShortestProducablePolymer(inputText);

@@ -2,7 +2,7 @@
 {
     class InputReader
     {
-        public static string[] getInput(string fileName)
+        public static string[] GetInput(string fileName)
         {
             string[] lines = System.IO.File.ReadAllLines(@"..\..\..\resources\" + fileName + ".txt");
             return lines;

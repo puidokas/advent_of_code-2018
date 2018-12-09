@@ -7,7 +7,7 @@ namespace advent_of_code_2018.solutions
     {
         public static void Run()
         {
-            string[] lines = InputReader.getInput("input3");
+            string[] lines = InputReader.GetInput("input3");
 
             const int dim = 1000;
             int[,] squareInches = new int[dim, dim];

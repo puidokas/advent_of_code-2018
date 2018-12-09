@@ -12,7 +12,7 @@ namespace advent_of_code_2018.solutions
 
         public static void Run()
         {
-            string[] lines = InputReader.getInput("input4");
+            string[] lines = InputReader.GetInput("input4");
             List<(int, Action, DateTime)> sortedLogs = SortInput(lines);
             Dictionary<int, int[]> sleepingGuards = GetGuardSleepingData(sortedLogs);
             (int, int) mostAsleepGuard = GetMostAsleepGuard(sleepingGuards);
