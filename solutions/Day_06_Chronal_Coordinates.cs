@@ -20,8 +20,8 @@ namespace advent_of_code_2018.solutions
                 (8, 9)
             };
 
-            //List<(int x, int y)> chronalPoints = GetChronalPoints(lines);
-            List<(int x, int y)> chronalPoints = testPoints;
+            List<(int x, int y)> chronalPoints = GetChronalPoints(lines);
+            //List<(int x, int y)> chronalPoints = testPoints;
 
             (int x, int y) maxCoordinates = GetMaxCoordinates(chronalPoints);
             (int x, int y) minCoordinates = GetMinCoordinates(chronalPoints);
@@ -59,6 +59,12 @@ namespace advent_of_code_2018.solutions
             for (int y = 0; y < maxCoordinates.y; y++) {
                 for(int x = 0; x < maxCoordinates.x; x++)
                 {
+                    if(y < minCoordinates.y || x < minCoordinates.x)
+                    {
+                        chronalSpace[x, y] = -1;
+                        continue;
+                    }
+
                     int closestPoint = -1;
                     int closestDistance = Int32.MaxValue;
                     bool multiplePointsClose = false;
