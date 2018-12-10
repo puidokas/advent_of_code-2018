@@ -5,11 +5,11 @@ using System.Linq;
 
 namespace advent_of_code_2018.solutions
 {
-    class Day_06_Chronal_Coordinates
+    class Day_06_Chronal_Coordinates : IRunnable
     {
-        public static void Run()
+        public void Run()
         {
-            string[] lines = InputReader.GetInput("input6");
+            string[] lines = InputReader.GetInput(6);
 
             List<(int x, int y)> testPoints = new List<(int x, int y)>() {
                 (1, 1),
@@ -35,7 +35,7 @@ namespace advent_of_code_2018.solutions
             Console.WriteLine(largestArea);
         }
 
-        private static List<int> GetInfinitePoints(List<(int x, int y)> chronalPoints, (int x, int y) maxCoordinates, (int x, int y) minCoordinates)
+        private List<int> GetInfinitePoints(List<(int x, int y)> chronalPoints, (int x, int y) maxCoordinates, (int x, int y) minCoordinates)
         {
             List<int> infinitePoints = new List<int>();
 
@@ -51,7 +51,7 @@ namespace advent_of_code_2018.solutions
             return infinitePoints;
         }
 
-        private static int[,] GetChronalSpace((int x, int y) maxCoordinates, (int x, int y) minCoordinates, List<(int x, int y)> chronalPoints)
+        private int[,] GetChronalSpace((int x, int y) maxCoordinates, (int x, int y) minCoordinates, List<(int x, int y)> chronalPoints)
         {
 
             int[,] chronalSpace = new int[maxCoordinates.x, maxCoordinates.y];
@@ -93,14 +93,14 @@ namespace advent_of_code_2018.solutions
             return chronalSpace;
         }
 
-        private static int GetManhattanDistance((int x, int y) vector1, (int x, int y) vector2)
+        private int GetManhattanDistance((int x, int y) vector1, (int x, int y) vector2)
         {
             int result = Math.Abs(vector1.x - vector2.x) + Math.Abs(vector1.y - vector2.y);
 
             return result;
         }
 
-        private static List<(int, int)> GetChronalPoints(string[] lines)
+        private List<(int, int)> GetChronalPoints(string[] lines)
         {
             List<(int, int)> chronalPoints = new List<(int, int)>();
 
@@ -115,7 +115,7 @@ namespace advent_of_code_2018.solutions
             return chronalPoints;
         }
 
-        private static (int, int) GetMaxCoordinates(List<(int x, int y)> chronalPoints)
+        private (int, int) GetMaxCoordinates(List<(int x, int y)> chronalPoints)
         {
             int maxX = chronalPoints.Select(c => c.x).Max();
             int maxY = chronalPoints.Select(c => c.y).Max();
@@ -123,7 +123,7 @@ namespace advent_of_code_2018.solutions
             return (maxX, maxY);
         }
 
-        private static (int, int) GetMinCoordinates(List<(int x, int y)> chronalPoints)
+        private (int, int) GetMinCoordinates(List<(int x, int y)> chronalPoints)
         {
             int minX = chronalPoints.Select(c => c.x).Min();
             int minY = chronalPoints.Select(c => c.y).Min();
@@ -131,7 +131,7 @@ namespace advent_of_code_2018.solutions
             return (minX, minY);
         }
 
-        private static int GetLargestArea(int[,] chronalSpace, List<(int x, int y)> chronalPoints, List<int> infinitePoints)
+        private int GetLargestArea(int[,] chronalSpace, List<(int x, int y)> chronalPoints, List<int> infinitePoints)
         {
             int[] pointAreas = new int[chronalPoints.Count];
 

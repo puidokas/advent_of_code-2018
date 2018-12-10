@@ -4,11 +4,11 @@ using System.Linq;
 
 namespace advent_of_code_2018.solutions
 {
-    class Day_02_Inventories
+    class Day_02_Inventories : IRunnable
     {
-        public static void Run()
+        public void Run()
         {
-            string[] lines = InputReader.GetInput("input2");
+            string[] lines = InputReader.GetInput(2);
 
             int checksum = GetChecksum(lines);
             string commonLetters = GetCommonLetters(lines);
@@ -18,7 +18,7 @@ namespace advent_of_code_2018.solutions
 
         // What is the checksum for your list of box IDs?
 
-        private static int GetChecksum(string[] lines)
+        private int GetChecksum(string[] lines)
         {
             int twice = 0, thrice = 0;
             bool twiceThisLine = false, thriceThisLine = false;
@@ -52,7 +52,7 @@ namespace advent_of_code_2018.solutions
 
         // What letters are common between the two correct box IDs?
 
-        private static string GetCommonLetters(string[] lines)
+        private string GetCommonLetters(string[] lines)
         {
             List<char> commonLetters = null;
 

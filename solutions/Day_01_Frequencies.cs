@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace advent_of_code_2018.solutions
 {
-    class Day_01_Frequencies
+    class Day_01_Frequencies : IRunnable
     {
-        public static void Run()
+        public void Run()
         {
             var result = GetFrequencies();
             Console.WriteLine(result);
@@ -16,9 +16,9 @@ namespace advent_of_code_2018.solutions
 
         // What is the first frequency your device reaches twice?
 
-        private static (int, int) GetFrequencies()
+        private (int, int) GetFrequencies()
         {
-            string[] lines = InputReader.GetInput("input1");
+            string[] lines = InputReader.GetInput(1);
 
             int num, resultFrequency = 0, currentFrequency = 0, duplicateFrequency = 0;
             List<int> frequencies = new List<int>();

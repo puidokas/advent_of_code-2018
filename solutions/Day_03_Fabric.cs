@@ -3,11 +3,11 @@ using System.Text.RegularExpressions;
 
 namespace advent_of_code_2018.solutions
 {
-    class Day_03_Fabric
+    class Day_03_Fabric : IRunnable
     {
-        public static void Run()
+        public void Run()
         {
-            string[] lines = InputReader.GetInput("input3");
+            string[] lines = InputReader.GetInput(3);
 
             const int dim = 1000;
             int[,] squareInches = new int[dim, dim];
@@ -22,7 +22,7 @@ namespace advent_of_code_2018.solutions
 
         // How many square inches of fabric are within two or more claims?
 
-        private static int GetNumberOfOverlappingSquareInches(string[] lines, ref int[][] claims, ref int[,] squareInches)
+        private int GetNumberOfOverlappingSquareInches(string[] lines, ref int[][] claims, ref int[,] squareInches)
         {
             Regex regex = new Regex(@"#(\d+)\s@\s(\d+),(\d+):\s(\d+)x(\d+)");
 
@@ -61,7 +61,7 @@ namespace advent_of_code_2018.solutions
 
         // What is the ID of the only claim that doesn't overlap?
 
-        private static int GetIdOfNotOverlappingClaim(int[][] claims, int[,] squareInches)
+        private int GetIdOfNotOverlappingClaim(int[][] claims, int[,] squareInches)
         {
             int claimId, leftEdge, topEdge, wide, tall;
             bool claimOverlapping = false;

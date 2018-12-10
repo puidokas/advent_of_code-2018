@@ -3,11 +3,11 @@ using System;
 
 namespace advent_of_code_2018.solutions
 {
-    class Day_05_Polymers
+    class Day_05_Polymers : IRunnable
     {
-        public static void Run()
+        public void Run()
         {
-            string inputText = InputReader.GetInput("input5")[0];
+            string inputText = InputReader.GetInput(5)[0];
 
             int numberOfUnitsLeft = GetNumberOfUnitsLeft(inputText);
             int shortestProducablePolymer = GetShortestProducablePolymer(inputText);
@@ -15,7 +15,7 @@ namespace advent_of_code_2018.solutions
             Console.WriteLine((numberOfUnitsLeft, shortestProducablePolymer));
         }
 
-        private static int GetNumberOfUnitsLeft(string inputText)
+        private int GetNumberOfUnitsLeft(string inputText)
         {
             bool changed = true;
 
@@ -51,7 +51,7 @@ namespace advent_of_code_2018.solutions
             return numberOfUnitsLeft;
         }
 
-        private static int GetShortestProducablePolymer(string inputText)
+        private int GetShortestProducablePolymer(string inputText)
         {
             int shortestPolymer = Int32.MaxValue;
 

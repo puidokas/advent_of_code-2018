@@ -6,20 +6,20 @@ using System.Text.RegularExpressions;
 
 namespace advent_of_code_2018.solutions
 {
-    class Day_04_Guards
+    class Day_04_Guards : IRunnable
     {
         private enum Action { BeginsShift, FallsAsleep, WakesUp };
 
-        public static void Run()
+        public void Run()
         {
-            string[] lines = InputReader.GetInput("input4");
+            string[] lines = InputReader.GetInput(4);
             List<(int, Action, DateTime)> sortedLogs = SortInput(lines);
             Dictionary<int, int[]> sleepingGuards = GetGuardSleepingData(sortedLogs);
             (int, int) mostAsleepGuard = GetMostAsleepGuard(sleepingGuards);
             Console.WriteLine(mostAsleepGuard);
         }
 
-        private static List<(int, Action, DateTime)> SortInput(string[] lines)
+        private List<(int, Action, DateTime)> SortInput(string[] lines)
         {
             Regex regex = new Regex(@"\[(\d+)-(\d+)-(\d+)\s(\d+):(\d+)]\s(.+)");
 
@@ -70,7 +70,7 @@ namespace advent_of_code_2018.solutions
             return logDates;
         }
 
-        private static Dictionary<int, int[]> GetGuardSleepingData(List<(int, Action, DateTime)> sortedLogs)
+        private Dictionary<int, int[]> GetGuardSleepingData(List<(int, Action, DateTime)> sortedLogs)
         {
             int fellAsleep = -1, wokeUp = -1;
             Dictionary<int, int[]> guards = new Dictionary<int, int[]>();
@@ -110,7 +110,7 @@ namespace advent_of_code_2018.solutions
             return guards;
         }
 
-        private static (int, int) GetMostAsleepGuard(Dictionary<int, int[]> sleepingGuards)
+        private (int, int) GetMostAsleepGuard(Dictionary<int, int[]> sleepingGuards)
         {
             int mostAsleepGuardId = -1, mostNumberOfHours = 0, mostPopularMinute, maxIndex;
             int mostSleptMinute = -1, minuteIndex = -1, mostSleptMinuteGuardId = -1;

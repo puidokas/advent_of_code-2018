@@ -2,9 +2,9 @@
 {
     class InputReader
     {
-        public static string[] GetInput(string fileName)
+        public static string[] GetInput(int dayNo)
         {
-            string[] lines = System.IO.File.ReadAllLines(@"..\..\..\resources\" + fileName + ".txt");
+            string[] lines = System.IO.File.ReadAllLines(@"..\..\..\resources\input" + dayNo + ".txt");
             return lines;
         }
     }
