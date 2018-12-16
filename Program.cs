@@ -16,8 +16,8 @@ namespace advent_of_code_2018
                 //new Day_03_Fabric(),
                 //new Day_04_Guards(),
                 //new Day_05_Polymers(),
-                //new Day_06_Chronal_Coordinates(),
-                new Day_07_The_Sum_of_Its_Parts()
+                new Day_06_Chronal_Coordinates(),
+                //new Day_07_The_Sum_of_Its_Parts()
             };
 
             for(int i = 0; i < solutions.Length; i++)

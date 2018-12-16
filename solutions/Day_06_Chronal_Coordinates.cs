@@ -26,45 +26,33 @@ namespace advent_of_code_2018.solutions
             (int x, int y) maxCoordinates = GetMaxCoordinates(chronalPoints);
             (int x, int y) minCoordinates = GetMinCoordinates(chronalPoints);
 
-            List<int> infinitePoints = GetInfinitePoints(chronalPoints, maxCoordinates, minCoordinates);
-
-            int[,] chronalSpace = GetChronalSpace(maxCoordinates, minCoordinates, chronalPoints);
-
-            int largestArea = GetLargestArea(chronalSpace, chronalPoints, infinitePoints);
+            int[] pointAreas = GetPointAreas(maxCoordinates, minCoordinates, chronalPoints);
+            int largestArea = GetLargestArea(pointAreas);
 
             Console.WriteLine(largestArea);
         }
 
-        private List<int> GetInfinitePoints(List<(int x, int y)> chronalPoints, (int x, int y) maxCoordinates, (int x, int y) minCoordinates)
+        private int GetLargestArea(int[] pointAreas)
         {
-            List<int> infinitePoints = new List<int>();
-
-            for(int i = 0; i < chronalPoints.Count; i++)
-            {
-                var point = chronalPoints[i];
-
-                if (point.x == minCoordinates.x || point.x == maxCoordinates.x ||
-                    point.y == minCoordinates.y || point.y == maxCoordinates.y)
-                    infinitePoints.Add(i);
-            }
-
-            return infinitePoints;
+            return pointAreas.Max();
         }
 
-        private int[,] GetChronalSpace((int x, int y) maxCoordinates, (int x, int y) minCoordinates, List<(int x, int y)> chronalPoints)
+        private bool IsInfinite((int x, int y) maxCoordinates, (int x, int y) minCoordinates, (int x, int y) coord)
         {
+            if (coord.y <= minCoordinates.y || coord.y >= maxCoordinates.y + 1 ||
+                        coord.x <= minCoordinates.x || coord.x >= maxCoordinates.x + 1)
+                return true;
+            else
+                return false;
+        }
 
-            int[,] chronalSpace = new int[maxCoordinates.x, maxCoordinates.y];
+        private int[] GetPointAreas((int x, int y) maxCoordinates, (int x, int y) minCoordinates, List<(int x, int y)> chronalPoints)
+        {
+            int[] pointAreas = new int[chronalPoints.Count];
 
-            for (int y = 0; y < maxCoordinates.y; y++) {
-                for(int x = 0; x < maxCoordinates.x; x++)
+            for (int y = minCoordinates.y; y <= maxCoordinates.y; y++) {
+                for(int x = minCoordinates.x; x <= maxCoordinates.x; x++)
                 {
-                    if(y < minCoordinates.y || x < minCoordinates.x)
-                    {
-                        chronalSpace[x, y] = -1;
-                        continue;
-                    }
-
                     int closestPoint = -1;
                     int closestDistance = Int32.MaxValue;
                     bool multiplePointsClose = false;
@@ -83,14 +71,14 @@ namespace advent_of_code_2018.solutions
                         }
                     }
 
-                    if (multiplePointsClose)
-                        chronalSpace[x, y] = -1;
-                    else
-                        chronalSpace[x, y] = closestPoint;
+                    bool isInfinite = IsInfinite(maxCoordinates, minCoordinates, chronalPoints[closestPoint]);
+
+                    if (!multiplePointsClose && !isInfinite)
+                        pointAreas[closestPoint]++;
 
                 }
             }
-            return chronalSpace;
+            return pointAreas;
         }
 
         private int GetManhattanDistance((int x, int y) vector1, (int x, int y) vector2)
@@ -129,26 +117,6 @@ namespace advent_of_code_2018.solutions
             int minY = chronalPoints.Select(c => c.y).Min();
 
             return (minX, minY);
-        }
-
-        private int GetLargestArea(int[,] chronalSpace, List<(int x, int y)> chronalPoints, List<int> infinitePoints)
-        {
-            int[] pointAreas = new int[chronalPoints.Count];
-
-            for (int y = 0; y < chronalSpace.GetLength(1); y++)
-            {
-                for (int x = 0; x < chronalSpace.GetLength(0); x++)
-                {
-                    int closestPointId = chronalSpace[x, y];
-
-                    if (closestPointId != -1 && !infinitePoints.Contains(closestPointId))
-                        pointAreas[closestPointId]++;
-                }
-            }
-
-            int largestArea = pointAreas.Max();
-
-            return largestArea;
         }
     }
 

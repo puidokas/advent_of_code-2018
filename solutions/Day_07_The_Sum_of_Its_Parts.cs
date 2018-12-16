@@ -9,21 +9,21 @@ namespace advent_of_code_2018.solutions
     {
         public void Run()
         {
-            string[] lines = InputReader.GetInput(7);
+            //string[] lines = InputReader.GetInput(7);
 
-            //string[] lines = {
-            //    "Step C must be finished before step A can begin.",
-            //    "Step C must be finished before step F can begin.",
-            //    "Step A must be finished before step B can begin.",
-            //    "Step A must be finished before step D can begin.",
-            //    "Step B must be finished before step E can begin.",
-            //    "Step D must be finished before step E can begin.",
-            //    "Step F must be finished before step E can begin."
-            //};
+            string[] lines = {
+                "Step C must be finished before step A can begin.",
+                "Step C must be finished before step F can begin.",
+                "Step A must be finished before step B can begin.",
+                "Step A must be finished before step D can begin.",
+                "Step B must be finished before step E can begin.",
+                "Step D must be finished before step E can begin.",
+                "Step F must be finished before step E can begin."
+            };
 
             Dictionary<char, List<char>> steps = GetSteps(lines);
 
-            string orderOfSteps = GetOrderOfSteps(steps);
+            string orderOfSteps = GetOrderOfSteps(steps, 2);
 
             //int timeToWork = 0;
             //foreach (char step in orderOfSteps)
@@ -34,41 +34,82 @@ namespace advent_of_code_2018.solutions
             Console.WriteLine(orderOfSteps);
         }
 
-        private string GetOrderOfSteps(Dictionary<char, List<char>> steps)
+        private string GetOrderOfSteps(Dictionary<char, List<char>> steps, int numberOfWorkers)
         {
             List<char> path = new List<char>();
             List<char> keysWaitingToBeActivated = new List<char>();
 
+            List<(char, int)> nextKeys;
             List<char> firstPositions = GetFirstPositions(steps);
 
             foreach (char position in firstPositions)
                 keysWaitingToBeActivated.Add(position);
 
+            int timeToWork = 0;
+
             while (path.Count < steps.Count)
             {
                 keysWaitingToBeActivated.Sort((x, y) => x.CompareTo(y));
 
-                char nextKey = '\0';
+                //char nextKey = '\0';
+                nextKeys = new List<(char, int)>();
 
                 for (int j = 0; j < keysWaitingToBeActivated.Count; j++)
                 {
                     if (ArePrerequisitesSatisfied(keysWaitingToBeActivated[j], steps, path))
                     {
-                        nextKey = keysWaitingToBeActivated[j];
-                        break;
+                        if (nextKeys.Count > 0)
+                        {
+                            foreach ((char _char, int _count) nextKey in nextKeys)
+                            {
+                                if (nextKey._count == 0)
+                                {
+                                    int secondsToWork = GetSecondsToWork(keysWaitingToBeActivated[j]);
+                                    //nextKey
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (nextKeys.Count < numberOfWorkers)
+                            {
+                                int secondsToWork = GetSecondsToWork(keysWaitingToBeActivated[j]);
+                                nextKeys.Add((keysWaitingToBeActivated[j], secondsToWork));
+                                timeToWork += secondsToWork;
+                            }
+                        }
+                        //else
+                        //    break;
+                        //nextKey = keysWaitingToBeActivated[j];
+                        //break;
                     }
                 }
 
-                path.Add(nextKey);
-                keysWaitingToBeActivated.Remove(nextKey);
-
-                List<char> dependencies = steps[nextKey];
-
-                foreach (char dependency in dependencies)
+                for(int i = 0; i < nextKeys.Count; i++)
                 {
-                    if (!keysWaitingToBeActivated.Contains(dependency))
-                        keysWaitingToBeActivated.Add(dependency);
+                    // key is idle
+                    if (nextKeys[i].Item2 > 0)
+                    {
+                        nextKeys[i] = (nextKeys[i].Item1, nextKeys[i].Item2 - 1);
+                        continue;
+                    } else
+                    {
+                        char nextKey = nextKeys[i].Item1;
+
+                        List<char> dependencies = steps[nextKey];
+
+                        foreach (char dependency in dependencies)
+                        {
+                            if (!keysWaitingToBeActivated.Contains(dependency))
+                                keysWaitingToBeActivated.Add(dependency);
+                        }
+
+                        path.Add(nextKey);
+
+                        keysWaitingToBeActivated.Remove(nextKey);
+                    }
                 }
+
             }
 
             var orderOfSteps = String.Concat(path.Select(o => o));
