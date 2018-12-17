@@ -11,20 +11,38 @@ namespace advent_of_code_2018.solutions
         {
             string[] lines = InputReader.GetInput(6);
 
-            List<(int x, int y)> testPoints = new List<(int x, int y)>() {
+            //List<(int x, int y)> testPoints = new List<(int x, int y)>() {
+            //    (1, 1),
+            //    (1, 6),
+            //    (8, 3),
+            //    (3, 4),
+            //    (5, 5),
+            //    (8, 9)
+            //};
+
+            List<(int x, int y)> testBPoints = new List<(int x, int y)>() {
                 (1, 1),
-                (1, 6),
-                (8, 3),
-                (3, 4),
-                (5, 5),
-                (8, 9)
+                (1, 101),
+                (48, 51),
+                (51, 48),
+                (51, 51),
+                (51, 54),
+                (54, 51),
+                (101, 1),
+                (101, 101)
             };
 
-            List<(int x, int y)> chronalPoints = GetChronalPoints(lines);
+            //List<(int x, int y)> chronalPoints = GetChronalPoints(lines);
             //List<(int x, int y)> chronalPoints = testPoints;
+            List<(int x, int y)> chronalPoints = testBPoints;
 
             (int x, int y) maxCoordinates = GetMaxCoordinates(chronalPoints);
             (int x, int y) minCoordinates = GetMinCoordinates(chronalPoints);
+
+            chronalPoints = chronalPoints.Where(p => !IsInfinite(maxCoordinates, minCoordinates, p)).ToList();
+
+            maxCoordinates = GetMaxCoordinates(chronalPoints);
+            minCoordinates = GetMinCoordinates(chronalPoints);
 
             int[] pointAreas = GetPointAreas(maxCoordinates, minCoordinates, chronalPoints);
             int largestArea = GetLargestArea(pointAreas);
@@ -39,8 +57,8 @@ namespace advent_of_code_2018.solutions
 
         private bool IsInfinite((int x, int y) maxCoordinates, (int x, int y) minCoordinates, (int x, int y) coord)
         {
-            if (coord.y <= minCoordinates.y || coord.y >= maxCoordinates.y + 1 ||
-                        coord.x <= minCoordinates.x || coord.x >= maxCoordinates.x + 1)
+            if (coord.y == minCoordinates.y || coord.y == maxCoordinates.y ||
+                        coord.x == minCoordinates.x || coord.x == maxCoordinates.x)
                 return true;
             else
                 return false;
@@ -71,9 +89,7 @@ namespace advent_of_code_2018.solutions
                         }
                     }
 
-                    bool isInfinite = IsInfinite(maxCoordinates, minCoordinates, chronalPoints[closestPoint]);
-
-                    if (!multiplePointsClose && !isInfinite)
+                    if (!multiplePointsClose)
                         pointAreas[closestPoint]++;
 
                 }
