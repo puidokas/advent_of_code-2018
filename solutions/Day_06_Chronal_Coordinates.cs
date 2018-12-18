@@ -7,6 +7,8 @@ namespace advent_of_code_2018.solutions
 {
     class Day_06_Chronal_Coordinates : IRunnable
     {
+        const int TotalDistanceToAllPoints = 10000;
+
         public void Run()
         {
             string[] lines = InputReader.GetInput(6);
@@ -15,21 +17,15 @@ namespace advent_of_code_2018.solutions
 
             (int x, int y) maxCoordinates = GetMaxCoordinates(chronalPoints);
 
-            int[] pointAreas = GetPointAreas(maxCoordinates, chronalPoints);
+            (int largestArea, int region) = GetSolution(maxCoordinates, chronalPoints);
 
-            int largestArea = GetLargestArea(pointAreas);
-
-            Console.WriteLine(largestArea);
+            Console.WriteLine((largestArea, region));
         }
 
-        private int GetLargestArea(int[] pointAreas)
-        {
-            return pointAreas.Max();
-        }
-
-        private int[] GetPointAreas((int x, int y) maxCoordinates, List<(int x, int y)> chronalPoints)
+        private (int, int) GetSolution((int x, int y) maxCoordinates, List<(int x, int y)> chronalPoints)
         {
             int[] pointAreas = new int[chronalPoints.Count];
+            int region = 0;
 
             for (int y = 0; y <= maxCoordinates.y; y++) {
                 for(int x = 0; x <= maxCoordinates.x; x++)
@@ -37,12 +33,14 @@ namespace advent_of_code_2018.solutions
                     int closestPoint = -1;
                     int closestDistance = Int32.MaxValue;
                     bool multiplePointsClose = false;
+                    int totalDistance = 0;
 
                     for(int pointIndex = 0; pointIndex < chronalPoints.Count; pointIndex++)
                     {
                         int distance = GetManhattanDistance((x, y), chronalPoints[pointIndex]);
+                        totalDistance += distance;
 
-                        if(distance == closestDistance)
+                        if (distance == closestDistance)
                             multiplePointsClose = true;
                         else if (distance < closestDistance)
                         {
@@ -52,6 +50,9 @@ namespace advent_of_code_2018.solutions
                         }
                     }
 
+                    if (totalDistance < TotalDistanceToAllPoints)
+                        region++;
+
                     if (x == 0 || x == maxCoordinates.x || y == 0 || y == maxCoordinates.y)
                         pointAreas[closestPoint] = -1;
                     else if(!multiplePointsClose && pointAreas[closestPoint] != -1)
@@ -60,7 +61,7 @@ namespace advent_of_code_2018.solutions
                 }
             }
 
-            return pointAreas;
+            return (pointAreas.Max(), region);
         }
 
         private int GetManhattanDistance((int x, int y) vector1, (int x, int y) vector2)
