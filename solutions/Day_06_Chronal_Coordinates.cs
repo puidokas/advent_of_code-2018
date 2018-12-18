@@ -11,40 +11,12 @@ namespace advent_of_code_2018.solutions
         {
             string[] lines = InputReader.GetInput(6);
 
-            //List<(int x, int y)> testPoints = new List<(int x, int y)>() {
-            //    (1, 1),
-            //    (1, 6),
-            //    (8, 3),
-            //    (3, 4),
-            //    (5, 5),
-            //    (8, 9)
-            //};
-
-            List<(int x, int y)> testBPoints = new List<(int x, int y)>() {
-                (1, 1),
-                (1, 101),
-                (48, 51),
-                (51, 48),
-                (51, 51),
-                (51, 54),
-                (54, 51),
-                (101, 1),
-                (101, 101)
-            };
-
-            //List<(int x, int y)> chronalPoints = GetChronalPoints(lines);
-            //List<(int x, int y)> chronalPoints = testPoints;
-            List<(int x, int y)> chronalPoints = testBPoints;
+            List<(int x, int y)> chronalPoints = GetChronalPoints(lines);
 
             (int x, int y) maxCoordinates = GetMaxCoordinates(chronalPoints);
-            (int x, int y) minCoordinates = GetMinCoordinates(chronalPoints);
 
-            chronalPoints = chronalPoints.Where(p => !IsInfinite(maxCoordinates, minCoordinates, p)).ToList();
+            int[] pointAreas = GetPointAreas(maxCoordinates, chronalPoints);
 
-            maxCoordinates = GetMaxCoordinates(chronalPoints);
-            minCoordinates = GetMinCoordinates(chronalPoints);
-
-            int[] pointAreas = GetPointAreas(maxCoordinates, minCoordinates, chronalPoints);
             int largestArea = GetLargestArea(pointAreas);
 
             Console.WriteLine(largestArea);
@@ -55,21 +27,12 @@ namespace advent_of_code_2018.solutions
             return pointAreas.Max();
         }
 
-        private bool IsInfinite((int x, int y) maxCoordinates, (int x, int y) minCoordinates, (int x, int y) coord)
-        {
-            if (coord.y == minCoordinates.y || coord.y == maxCoordinates.y ||
-                        coord.x == minCoordinates.x || coord.x == maxCoordinates.x)
-                return true;
-            else
-                return false;
-        }
-
-        private int[] GetPointAreas((int x, int y) maxCoordinates, (int x, int y) minCoordinates, List<(int x, int y)> chronalPoints)
+        private int[] GetPointAreas((int x, int y) maxCoordinates, List<(int x, int y)> chronalPoints)
         {
             int[] pointAreas = new int[chronalPoints.Count];
 
-            for (int y = minCoordinates.y; y <= maxCoordinates.y; y++) {
-                for(int x = minCoordinates.x; x <= maxCoordinates.x; x++)
+            for (int y = 0; y <= maxCoordinates.y; y++) {
+                for(int x = 0; x <= maxCoordinates.x; x++)
                 {
                     int closestPoint = -1;
                     int closestDistance = Int32.MaxValue;
@@ -89,19 +52,20 @@ namespace advent_of_code_2018.solutions
                         }
                     }
 
-                    if (!multiplePointsClose)
+                    if (x == 0 || x == maxCoordinates.x || y == 0 || y == maxCoordinates.y)
+                        pointAreas[closestPoint] = -1;
+                    else if(!multiplePointsClose && pointAreas[closestPoint] != -1)
                         pointAreas[closestPoint]++;
 
                 }
             }
+
             return pointAreas;
         }
 
         private int GetManhattanDistance((int x, int y) vector1, (int x, int y) vector2)
         {
-            int result = Math.Abs(vector1.x - vector2.x) + Math.Abs(vector1.y - vector2.y);
-
-            return result;
+            return Math.Abs(vector1.x - vector2.x) + Math.Abs(vector1.y - vector2.y);
         }
 
         private List<(int, int)> GetChronalPoints(string[] lines)
@@ -127,13 +91,6 @@ namespace advent_of_code_2018.solutions
             return (maxX, maxY);
         }
 
-        private (int, int) GetMinCoordinates(List<(int x, int y)> chronalPoints)
-        {
-            int minX = chronalPoints.Select(c => c.x).Min();
-            int minY = chronalPoints.Select(c => c.y).Min();
-
-            return (minX, minY);
-        }
     }
 
 }
