@@ -19,7 +19,7 @@ namespace advent_of_code_2018.solutions
 
             (int largestArea, int region) = GetSolution(maxCoordinates, chronalPoints);
 
-            Console.WriteLine((largestArea, region));
+            Console.Write((largestArea, region));
         }
 
         private (int, int) GetSolution((int x, int y) maxCoordinates, List<(int x, int y)> chronalPoints)

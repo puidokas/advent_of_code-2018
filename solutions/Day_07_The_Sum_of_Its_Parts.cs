@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace advent_of_code_2018.solutions
@@ -9,117 +10,86 @@ namespace advent_of_code_2018.solutions
     {
         public void Run()
         {
-            //string[] lines = InputReader.GetInput(7);
-
-            string[] lines = {
-                "Step C must be finished before step A can begin.",
-                "Step C must be finished before step F can begin.",
-                "Step A must be finished before step B can begin.",
-                "Step A must be finished before step D can begin.",
-                "Step B must be finished before step E can begin.",
-                "Step D must be finished before step E can begin.",
-                "Step F must be finished before step E can begin."
-            };
+            string[] lines = InputReader.GetInput(7);
 
             Dictionary<char, List<char>> steps = GetSteps(lines);
 
-            string orderOfSteps = GetOrderOfSteps(steps, 2);
+            (string orderOfSteps, _) = GetSolution(steps, 1);
 
-            //int timeToWork = 0;
-            //foreach (char step in orderOfSteps)
-            //{
-            //    timeToWork += GetSecondsToWork(step);
-            //}
+            (_, int timeToWork) = GetSolution(steps, 5);
 
-            Console.WriteLine(orderOfSteps);
+            Console.Write((orderOfSteps, timeToWork));
         }
 
-        private string GetOrderOfSteps(Dictionary<char, List<char>> steps, int numberOfWorkers)
+        private (string, int) GetSolution(Dictionary<char, List<char>> steps, int numberOfWorkers)
         {
-            List<char> path = new List<char>();
+            StringBuilder path = new StringBuilder();
             List<char> keysWaitingToBeActivated = new List<char>();
+            List<(char, int)> nextKeys = new List<(char, int)>();
+            int timeToWork = 0;
 
-            List<(char, int)> nextKeys;
             List<char> firstPositions = GetFirstPositions(steps);
 
             foreach (char position in firstPositions)
                 keysWaitingToBeActivated.Add(position);
 
-            int timeToWork = 0;
-
-            while (path.Count < steps.Count)
+            while (path.Length < steps.Count)
             {
-                keysWaitingToBeActivated.Sort((x, y) => x.CompareTo(y));
-
-                //char nextKey = '\0';
-                nextKeys = new List<(char, int)>();
+                if(keysWaitingToBeActivated.Count > 1)
+                    keysWaitingToBeActivated.Sort((x, y) => x.CompareTo(y));
 
                 for (int j = 0; j < keysWaitingToBeActivated.Count; j++)
                 {
-                    if (ArePrerequisitesSatisfied(keysWaitingToBeActivated[j], steps, path))
+                    if (ArePrerequisitesSatisfied(keysWaitingToBeActivated[j], steps, path.ToString()))
                     {
-                        if (nextKeys.Count > 0)
+                        if (nextKeys.Count < numberOfWorkers)
                         {
-                            foreach ((char _char, int _count) nextKey in nextKeys)
-                            {
-                                if (nextKey._count == 0)
-                                {
-                                    int secondsToWork = GetSecondsToWork(keysWaitingToBeActivated[j]);
-                                    //nextKey
-                                }
-                            }
+                            int secondsToWork = GetSecondsToWork(keysWaitingToBeActivated[j]);
+                            nextKeys.Add((keysWaitingToBeActivated[j], 60 + secondsToWork));
                         }
                         else
-                        {
-                            if (nextKeys.Count < numberOfWorkers)
-                            {
-                                int secondsToWork = GetSecondsToWork(keysWaitingToBeActivated[j]);
-                                nextKeys.Add((keysWaitingToBeActivated[j], secondsToWork));
-                                timeToWork += secondsToWork;
-                            }
-                        }
-                        //else
-                        //    break;
-                        //nextKey = keysWaitingToBeActivated[j];
-                        //break;
+                            break;
                     }
                 }
 
-                for(int i = 0; i < nextKeys.Count; i++)
+            foreach((char key, int count) in nextKeys)
+                keysWaitingToBeActivated.Remove(key);
+
+            int minValue = nextKeys.Select(o => o.Item2).Min();
+
+            timeToWork += minValue;
+
+            nextKeys = nextKeys.Select(o => {
+                int count = o.Item2 - minValue;
+
+                if(count == 0)
                 {
-                    // key is idle
-                    if (nextKeys[i].Item2 > 0)
+                    char nextKey = o.Item1;
+
+                    List<char> dependencies = steps[nextKey];
+
+                    foreach (char dependency in dependencies)
                     {
-                        nextKeys[i] = (nextKeys[i].Item1, nextKeys[i].Item2 - 1);
-                        continue;
-                    } else
-                    {
-                        char nextKey = nextKeys[i].Item1;
-
-                        List<char> dependencies = steps[nextKey];
-
-                        foreach (char dependency in dependencies)
-                        {
-                            if (!keysWaitingToBeActivated.Contains(dependency))
-                                keysWaitingToBeActivated.Add(dependency);
-                        }
-
-                        path.Add(nextKey);
-
-                        keysWaitingToBeActivated.Remove(nextKey);
+                        if (!keysWaitingToBeActivated.Contains(dependency))
+                            keysWaitingToBeActivated.Add(dependency);
                     }
+
+                    path.Append(nextKey);
                 }
 
+                return (o.Item1, count);
+
+                }).ToList();
+
+                nextKeys = nextKeys.Where(o => !path.ToString().Contains(o.Item1)).ToList();
             }
 
-            var orderOfSteps = String.Concat(path.Select(o => o));
-
-            return orderOfSteps;
+            return (path.ToString(), timeToWork);
         }
 
         private int GetSecondsToWork(char inputChar)
         {
-            return((int)inputChar - 64);
+            return(inputChar - 64);
         }
 
         private Dictionary<char, List<char>> GetSteps(string[] lines)
@@ -148,26 +118,24 @@ namespace advent_of_code_2018.solutions
             return steps;
         }
 
-        private bool ArePrerequisitesSatisfied(char keyA, Dictionary<char, List<char>> steps, List<char> path)
+        private bool ArePrerequisitesSatisfied(char inputKey, Dictionary<char, List<char>> steps, String path)
         {
-            List<char> nextPositions = new List<char>();
-
-            bool waitingForKey = false;
+            bool prerequisitesSatisfied = true;
             foreach (char key in steps.Keys)
             {
-                if (steps[key].Contains(keyA) && !path.Contains(key))
+                if (steps[key].Contains(inputKey) && !path.Contains(key))
                 {
-                    waitingForKey = true;
+                    prerequisitesSatisfied = false;
                     break;
                 }
             }
 
-            return !waitingForKey;
+            return prerequisitesSatisfied;
         }
 
         private List<char> GetFirstPositions(Dictionary<char, List<char>> steps)
         {
-            List<char> nextPositions = new List<char>();
+            List<char> firstPositions = new List<char>();
 
             foreach (char currentKey in steps.Keys)
             {
@@ -182,66 +150,12 @@ namespace advent_of_code_2018.solutions
                 }
 
                 if (!waitingForKey)
-                    nextPositions.Add(currentKey);
+                    firstPositions.Add(currentKey);
             }
 
-            nextPositions.Sort((x, y) => x.CompareTo(y));
+            firstPositions.Sort((x, y) => x.CompareTo(y));
 
-            return nextPositions;
-        }
-    }
-
-
-
-    //class Node
-    //{
-    //    public SortedList<char> waitingFor;
-
-    //    public Node()
-    //    {
-
-    //    }
-    //}
-
-    class LinkedList
-    {
-        private Node head;
-
-        public LinkedList(Node head)
-        {
-            this.head = head;
-        }
-
-        public Node GetHeadNode()
-        {
-            return head;
-        }
-    }
-
-    class Node
-    {
-        private List<char> connectedNodes;
-        private char value;
-
-        public Node(char value)
-        {
-            this.connectedNodes = new List<char>();
-            this.value = value;
-        }
-
-        public void AddConnection(char node)
-        {
-            connectedNodes.Add(node);
-        }
-
-        public bool Contains(char node)
-        {
-            return connectedNodes.Contains(node);
-        }
-
-        public char GetValue()
-        {
-            return value;
+            return firstPositions;
         }
     }
 }

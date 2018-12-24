@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace advent_of_code_2018.solutions
 {
-    class Day_01_Frequencies : IRunnable
+    class Day_01_Chronal_Calibration : IRunnable
     {
         public void Run()
         {
             var result = GetFrequencies();
-            Console.WriteLine(result);
+            Console.Write(result);
         }
 
         // Starting with a frequency of zero, 

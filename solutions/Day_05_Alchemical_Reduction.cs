@@ -3,7 +3,7 @@ using System;
 
 namespace advent_of_code_2018.solutions
 {
-    class Day_05_Polymers : IRunnable
+    class Day_05_Alchemical_Reduction : IRunnable
     {
         public void Run()
         {
@@ -12,7 +12,7 @@ namespace advent_of_code_2018.solutions
             int numberOfUnitsLeft = GetNumberOfUnitsLeft(inputText);
             int shortestProducablePolymer = GetShortestProducablePolymer(inputText);
 
-            Console.WriteLine((numberOfUnitsLeft, shortestProducablePolymer));
+            Console.Write((numberOfUnitsLeft, shortestProducablePolymer));
         }
 
         private int GetNumberOfUnitsLeft(string inputText)

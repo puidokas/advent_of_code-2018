@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace advent_of_code_2018.solutions
 {
-    class Day_03_Fabric : IRunnable
+    class Day_03_No_Matter_How_You_Slice_It : IRunnable
     {
         public void Run()
         {
@@ -17,7 +17,7 @@ namespace advent_of_code_2018.solutions
             int numberOfOverlappingSquareInches = GetNumberOfOverlappingSquareInches(lines, ref claims, ref squareInches);
             int idOfNotOverlappingClaim = GetIdOfNotOverlappingClaim(claims, squareInches);
 
-            Console.WriteLine((numberOfOverlappingSquareInches, idOfNotOverlappingClaim));
+            Console.Write((numberOfOverlappingSquareInches, idOfNotOverlappingClaim));
         }
 
         // How many square inches of fabric are within two or more claims?

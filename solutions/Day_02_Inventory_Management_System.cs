@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace advent_of_code_2018.solutions
 {
-    class Day_02_Inventories : IRunnable
+    class Day_02_Inventory_Management_System : IRunnable
     {
         public void Run()
         {
@@ -13,7 +13,7 @@ namespace advent_of_code_2018.solutions
             int checksum = GetChecksum(lines);
             string commonLetters = GetCommonLetters(lines);
 
-            Console.WriteLine((checksum, commonLetters));
+            Console.Write((checksum, commonLetters));
         }
 
         // What is the checksum for your list of box IDs?

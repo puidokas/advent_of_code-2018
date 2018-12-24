@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace advent_of_code_2018.solutions
 {
-    class Day_04_Guards : IRunnable
+    class Day_04_Repose_Record : IRunnable
     {
         private enum Action { BeginsShift, FallsAsleep, WakesUp };
 
@@ -16,7 +16,7 @@ namespace advent_of_code_2018.solutions
             List<(int, Action, DateTime)> sortedLogs = SortInput(lines);
             Dictionary<int, int[]> sleepingGuards = GetGuardSleepingData(sortedLogs);
             (int, int) mostAsleepGuard = GetMostAsleepGuard(sleepingGuards);
-            Console.WriteLine(mostAsleepGuard);
+            Console.Write(mostAsleepGuard);
         }
 
         private List<(int, Action, DateTime)> SortInput(string[] lines)
